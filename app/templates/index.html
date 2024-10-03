@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommender</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Movie Recommender</h1>
+
+        <!-- 映画検索フォーム -->
+        <div class="search-bar">
+        </div>
+
+        <div class="choice-list" id="movie-choices">
+            <h2>Choose one of your favorite movies</h2>
+            <ul>
+                {% for i,er in escaped_rand_list.items() %}
+                <li>
+                    <input type="radio" name="choices" value={{er}} />
+                    <label id="title">{{ rand_list[i] }}</label>
+                </li>
+                {% endfor %}
+            </ul>
+            <button id="search-btn">Search</button>        
+            <button id="refresh-btn">Nothing Here</button>
+        </div>
+
+        <!-- 映画情報と推薦結果を表示する領域 -->
+        <div class="movie-details">
+            <h2 id="movie-title"></h2>
+            <p id="movie-description"></p>
+        </div>
+
+        <div class="recommendations">
+            <h3>Recommended Movies:</h3>
+            <ul id="recommendation-list"></ul>
+        </div>
+    </div>
+
+    <script src="../static/script.js"></script>
+</body>
+</html>

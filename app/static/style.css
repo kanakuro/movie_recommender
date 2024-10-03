@@ -1,0 +1,89 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#movie-input {
+    width: 70%;
+    padding: 10px;
+    font-size: 16px;
+}
+
+#search-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+#refresh-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+#title {
+    margin-right: 15px;
+}
+
+.movie-details {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.choice-list {
+    margin-top: 40px;
+}
+
+.choice-list ul {
+    list-style-type: none;
+    padding: 10px;
+}
+
+input:checked {
+    border: 6px solid black;
+  }
+
+/* .choice-list li {
+    background-color: #e0e0e0;
+    margin-bottom: 10px;
+    border-radius: 5px;
+} */
+
+.recommendations {
+    margin-top: 40px;
+}
+
+.recommendations ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.recommendations li {
+    padding: 10px;
+    background-color: #e0e0e0;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
