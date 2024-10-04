@@ -7,20 +7,28 @@ const refreshBtn = document.getElementById("refresh-btn");
 const movieTitle = document.getElementById("movie-title");
 const movieDescription = document.getElementById("movie-description");
 const recommendationList = document.getElementById("recommendation-list");
+const loader = document.getElementById("loader");
 
 // 検索ボタンのクリックイベント
 searchBtn.addEventListener("click", () => {
-  const movieNameEscaped = document.querySelector(
+  let movieName = null;
+  let movieNameEscaped = document.querySelector(
     'input[name="choices"]:checked'
-  ).value;
-  const movieName = movieNameEscaped.replaceAll("&nbsp;", " ");
+  );
+  if (movieNameEscaped !== null) {
+    movieNameEscaped = movieNameEscaped.value;
+    movieName = movieNameEscaped.replaceAll("&nbsp;", " ");
+  }
 
   // 映画タイトルが入力されていない場合
   if (!movieName) {
+    // ローディング画面終了
+    loader.style.display = "none";
     alert("Please enter a movie title!");
     return;
   }
 
+  loader.style.display = "flex";
   // Flask APIにリクエストを送る
   fetch(`/recommend?title=${encodeURIComponent(movieName)}`)
     .then((response) => {
@@ -33,9 +41,13 @@ searchBtn.addEventListener("click", () => {
         displayMovieDetails(movieName);
         displayRecommendations(data);
       }
+      // ローディング画面終了
+      loader.style.display = "none";
     })
     .catch((error) => {
-      console.error(error);
+      console.error("error");
+      // ローディング画面終了
+      loader.style.display = "none";
     });
 });
 

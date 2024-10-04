@@ -1,8 +1,14 @@
 import requests
 import urllib.parse
+import os
+from dotenv import load_dotenv
+
+# .envファイルを読み込む
+load_dotenv()
 
 headers = {
     "accept": "application/json",
+    "Authorization": os.environ.get('AUTH')
 }
 
 def get_movie_image_url(movie_title):
