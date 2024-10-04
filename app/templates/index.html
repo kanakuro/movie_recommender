@@ -23,8 +23,10 @@
             <ul>
                 {% for i,er in escaped_rand_list.items() %}
                 <li class="rand-movie-area">
-                    <input type="radio" name="choices" value={{er[0]}} />
-                    <label id="title">{{ rand_list[i] }}</label>
+                    <label id="title">
+                        <input type="radio" name="choices" value={{er[0]}} />
+                        {{ rand_list[i] }}
+                    </label>
                     <img src={{er[1]}} alt="" width="" height="">
                 </li>
                 {% endfor %}
