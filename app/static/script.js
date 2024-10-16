@@ -1,13 +1,20 @@
-// script.js
+// contents_based
 
 // DOM要素の取得
 const searchBtn = document.getElementById("search-btn");
 const refreshBtn = document.getElementById("refresh-btn");
-// const movieInput = document.getElementById("movie-input");
 const movieTitle = document.getElementById("movie-title");
 const movieDescription = document.getElementById("movie-description");
 const recommendationList = document.getElementById("recommendation-list");
 const loader = document.getElementById("loader");
+const contentsBasedBtn = document.getElementById("contents_based");
+const menuArea = document.getElementById("menu_area");
+const contentsBasedArea = document.getElementById("contents_based_area");
+
+contentsBasedBtn.addEventListener("click", function () {
+  contentsBasedArea.style.display = "";
+  menuArea.style.display = "none";
+});
 
 // 検索ボタンのクリックイベント
 searchBtn.addEventListener("click", () => {

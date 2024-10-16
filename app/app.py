@@ -7,7 +7,6 @@ import html
 
 app = Flask(__name__)
 
-#「/index」へアクセスがあった場合に、「index.html」を返す
 @app.route("/index")
 def index():
     movie_indices = pd.read_csv('/Users/kuro/dev/movie_recommend/app/static/datas/movie_indices.csv', index_col=0)

@@ -12,41 +12,50 @@
     </div>
 
     <div class="container">
-        <h1>Movie Recommender</h1>
-
-        <!-- 映画検索フォーム -->
-        <div class="search-bar">
+        <div id="menu_area">
+            <h1>Movie Recommender</h1>
+            <div class="recommender">
+                <ul>
+                    <li id="contents_based"><a>コンテンツベースフィルタリング</a></li>
+                    <li><a>協調フィルタリング</a></li>
+                </ul>
+            </div>    
         </div>
 
-        <div class="choice-list" id="movie-choices">
-            <h2>Choose one of your favorite movies</h2>
-            <ul>
-                {% for i,er in escaped_rand_list.items() %}
-                <li class="rand-movie-area">
-                    <label id="title">
-                        <input type="radio" name="choices" value={{er[0]}} />
-                        {{ rand_list[i] }}
-                    </label>
-                    <img src={{er[1]}} alt="" width="" height="">
-                </li>
-                {% endfor %}
-            </ul>
-            <button id="search-btn">Search</button>        
-            <button id="refresh-btn">Nothing Here</button>
-        </div>
-
-        <!-- 映画情報と推薦結果を表示する領域 -->
-        <div class="movie-details">
-            <h2 id="movie-title"></h2>
-            <p id="movie-description"></p>
-        </div>
-
-        <div class="recommendations">
-            <h3>Recommended Movies:</h3>
-            <ul id="recommendation-list"></ul>
+        <div id="contents_based_area" style="display:none">
+            <!-- 映画検索フォーム -->
+            <div class="search-bar">
+            </div>
+        
+            <div class="choice-list" id="movie-choices">
+                <h2>Choose one of your favorite movies</h2>
+                <ul>
+                    {% for i,er in escaped_rand_list.items() %}
+                    <li class="rand-movie-area">
+                        <label id="title">
+                            <input type="radio" name="choices" value={{er[0]}} />
+                            {{ rand_list[i] }}
+                        </label>
+                        <img src={{er[1]}} alt="" width="" height="">
+                    </li>
+                    {% endfor %}
+                </ul>
+                <button id="search-btn">Search</button>        
+                <button id="refresh-btn">Nothing Here</button>
+            </div>
+        
+            <!-- 映画情報と推薦結果を表示する領域 -->
+            <div class="movie-details">
+                <h2 id="movie-title"></h2>
+                <p id="movie-description"></p>
+            </div>
+        
+            <div class="recommendations">
+                <h3>Recommended Movies:</h3>
+                <ul id="recommendation-list"></ul>
+            </div>
         </div>
     </div>
-
     <script src="../static/script.js"></script>
 </body>
 </html>
