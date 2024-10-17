@@ -15,16 +15,16 @@
         <div id="menu_area">
             <h1>Movie Recommender</h1>
             <div class="recommender">
-                <ul>
-                    <li id="contents_based"><a>コンテンツベースフィルタリング</a></li>
-                    <li><a>協調フィルタリング</a></li>
-                </ul>
+                    <a href="#contents_based" id="contents_based">コンテンツベースフィルタリング</a>
+                    <a>協調フィルタリング</a>
             </div>    
         </div>
 
         <div id="contents_based_area" style="display:none">
             <!-- 映画検索フォーム -->
-            <div class="search-bar">
+            <div id="header-button">
+                <button id="back-to-menu-btn">Back To Menu</button>        
+                <button id="back-to-contents-based-btn" style="display:none">Back To ContentsBased</button>
             </div>
         
             <div class="choice-list" id="movie-choices">
@@ -40,8 +40,10 @@
                     </li>
                     {% endfor %}
                 </ul>
-                <button id="search-btn">Search</button>        
-                <button id="refresh-btn">Nothing Here</button>
+                <div id="button-area">
+                    <button id="search-btn">Search</button>        
+                    <button id="refresh-btn">Nothing Here</button>
+                </div>
             </div>
         
             <!-- 映画情報と推薦結果を表示する領域 -->

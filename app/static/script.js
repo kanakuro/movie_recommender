@@ -10,10 +10,25 @@ const loader = document.getElementById("loader");
 const contentsBasedBtn = document.getElementById("contents_based");
 const menuArea = document.getElementById("menu_area");
 const contentsBasedArea = document.getElementById("contents_based_area");
+const buttonArea = document.getElementById("button-area");
+const backToMenuBtn = document.getElementById("back-to-menu-btn");
+const backToContentsBasedBtn = document.getElementById(
+  "back-to-contents-based-btn"
+);
 
 contentsBasedBtn.addEventListener("click", function () {
   contentsBasedArea.style.display = "";
   menuArea.style.display = "none";
+});
+
+// リロード後、メニューエリアを表示するかチェック
+window.addEventListener("load", () => {
+  if (localStorage.getItem("hideMenuArea") === "true") {
+    contentsBasedArea.style.display = "";
+    menuArea.style.display = "none";
+    backToContentsBasedBtn.display = "none";
+    localStorage.removeItem("hideMenuArea"); // 状態をリセット
+  }
 });
 
 // 検索ボタンのクリックイベント
@@ -47,7 +62,11 @@ searchBtn.addEventListener("click", () => {
       } else {
         displayMovieDetails(movieName);
         displayRecommendations(data);
+        hideNonSelectedMovieLists();
+        backToContentsBasedBtn.display = "";
+        buttonArea.style.display = "none";
       }
+
       // ローディング画面終了
       loader.style.display = "none";
     })
@@ -58,7 +77,19 @@ searchBtn.addEventListener("click", () => {
     });
 });
 
+// コンテンツベースの画面を出し直すボタン押下後の処理
 refreshBtn.addEventListener("click", () => {
+  localStorage.setItem("hideMenuArea", "true");
+  window.location.reload();
+});
+
+backToContentsBasedBtn.addEventListener("click", () => {
+  localStorage.setItem("hideMenuArea", "true");
+  window.location.reload();
+});
+
+// メニュー画面に戻るボタン押下後の処理
+backToMenuBtn.addEventListener("click", () => {
   window.location.reload();
 });
 
@@ -76,5 +107,23 @@ function displayRecommendations(recommendations) {
     const li = document.createElement("li");
     li.textContent = movie;
     recommendationList.appendChild(li);
+  });
+}
+
+// 選択されていないリストを非表示
+function hideNonSelectedMovieLists() {
+  // 全てのliタグを取得
+  const items = document.querySelectorAll("li.rand-movie-area");
+
+  // すべてのラジオボタンの状態を確認
+  items.forEach((item) => {
+    const radio = item.querySelector("input[type='radio']");
+    if (radio.checked) {
+      // 選択されているラジオボタンがあれば表示
+      item.style.display = "list-item";
+    } else {
+      // 選択されていないものは非表示
+      item.style.display = "none";
+    }
   });
 }
