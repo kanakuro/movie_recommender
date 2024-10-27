@@ -1,4 +1,6 @@
 from flask import Flask, request, jsonify ,render_template
+from sklearn.preprocessing import MultiLabelBinarizer
+from sklearn.metrics.pairwise import cosine_similarity
 import api
 import numpy as np
 import pandas as pd
@@ -20,6 +22,10 @@ def index():
         escaped_rand_list[i] = [escaped_rand_title, image_url]
     return render_template("index.html", rand_list = rand_list, escaped_rand_list = escaped_rand_list)
 
+
+####################################
+#     コンテンツベース
+####################################
 @app.route('/recommend', methods=['GET'])
 def recommend():
     title = request.args.get('title')
@@ -37,8 +43,13 @@ def get_recommendations(title):
     # ターゲット映画のインデックスを取得
     idx = movie_indices.iloc[movie_indices.index.str.startswith(title, na=False), 0].head(1).values[0]
 
-    # 類似度スコアのリストを取得
-    cosine_sim = np.loadtxt('/Users/kuro/dev/movie_recommend/app/static/datas/cosine_sim.txt')
+    # 類似度スコアを計算
+    movies = pd.read_csv('/Users/kuro/dev/movie_recommend/app/static/datas/movies.csv')
+    mlb = MultiLabelBinarizer()
+    movies['genres'] = movies['genres'].str.split('|')
+    # ジャンルをOne-Hot Encoding（0,1の形式）に変換
+    movies_with_genres = movies.join(pd.DataFrame(mlb.fit_transform(movies.pop('genres')), columns=mlb.classes_, index=movies.index))
+    cosine_sim = cosine_similarity(movies_with_genres.drop(['movieId', 'title'], axis=1))
     sim_scores = list(enumerate(cosine_sim[idx]))
 
     # 類似度スコアに基づいて映画をソート
@@ -53,6 +64,13 @@ def get_recommendations(title):
     # 推薦映画のタイトルを返す
     movie_titles = movie_indices.iloc[target_movie_indices].index.to_list()
     return movie_titles
+
+####################################
+#     協調フィルタリング(ユーザベース)
+####################################
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
