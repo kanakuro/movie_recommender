@@ -1,6 +1,6 @@
-// contents_based
-
-// DOM要素の取得
+////////////////////////////////////////
+///// DOM要素の取得
+////////////////////////////////////////
 const searchBtn = document.getElementById("search-btn");
 const refreshBtn = document.getElementById("refresh-btn");
 const movieTitle = document.getElementById("movie-title");
@@ -8,16 +8,26 @@ const movieDescription = document.getElementById("movie-description");
 const recommendationList = document.getElementById("recommendation-list");
 const loader = document.getElementById("loader");
 const contentsBasedBtn = document.getElementById("contents_based");
+const collabFilteringBtn = document.getElementById("collab_filtering");
 const menuArea = document.getElementById("menu_area");
 const contentsBasedArea = document.getElementById("contents_based_area");
-const buttonArea = document.getElementById("button-area");
-const backToMenuBtn = document.getElementById("back-to-menu-btn");
+const collabFilteringArea = document.getElementById("collab_filtering_area");
+const buttonArea = document.getElementById("contents-based-button-area");
+const backToMenuBtn = document.querySelectorAll(".back-to-menu-btn");
 const backToContentsBasedBtn = document.getElementById(
   "back-to-contents-based-btn"
 );
 
+////////////////////////////////////////
+///// メニュー画面
+////////////////////////////////////////
 contentsBasedBtn.addEventListener("click", function () {
   contentsBasedArea.style.display = "";
+  menuArea.style.display = "none";
+});
+
+collabFilteringBtn.addEventListener("click", function () {
+  collabFilteringArea.style.display = "";
   menuArea.style.display = "none";
 });
 
@@ -29,6 +39,28 @@ window.addEventListener("load", () => {
     backToContentsBasedBtn.display = "none";
     localStorage.removeItem("hideMenuArea"); // 状態をリセット
   }
+});
+
+////////////////////////////////////////
+///// コンテンツベース
+////////////////////////////////////////
+// コンテンツベースの画面を出し直すボタン押下後の処理
+refreshBtn.addEventListener("click", () => {
+  localStorage.setItem("hideMenuArea", "true");
+  window.location.reload();
+});
+
+// コンテンツベースに戻るボタン押下後の処理
+backToContentsBasedBtn.addEventListener("click", () => {
+  localStorage.setItem("hideMenuArea", "true");
+  window.location.reload();
+});
+
+// メニュー画面に戻るボタン押下後の処理
+backToMenuBtn.forEach(function (target) {
+  target.addEventListener("click", () => {
+    window.location.reload();
+  });
 });
 
 // 検索ボタンのクリックイベント
@@ -75,22 +107,6 @@ searchBtn.addEventListener("click", () => {
       // ローディング画面終了
       loader.style.display = "none";
     });
-});
-
-// コンテンツベースの画面を出し直すボタン押下後の処理
-refreshBtn.addEventListener("click", () => {
-  localStorage.setItem("hideMenuArea", "true");
-  window.location.reload();
-});
-
-backToContentsBasedBtn.addEventListener("click", () => {
-  localStorage.setItem("hideMenuArea", "true");
-  window.location.reload();
-});
-
-// メニュー画面に戻るボタン押下後の処理
-backToMenuBtn.addEventListener("click", () => {
-  window.location.reload();
 });
 
 // 映画の詳細情報を表示

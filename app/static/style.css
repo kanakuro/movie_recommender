@@ -6,7 +6,7 @@ body {
 }
 
 .container {
-    max-width: 800px;
+    max-width: 1000px;
     margin: 50px auto;
     background-color: white;
     padding: 20px;
@@ -121,3 +121,9 @@ input:checked {
     font-weight: bold;
   　color: rgb(30, 50, 93);
   }
+  .md-radio-inline {
+    display: inline-block;
+    }
+    .md-radio {
+        margin: 16px 0;
+    }

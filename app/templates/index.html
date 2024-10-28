@@ -16,14 +16,14 @@
             <h1>Movie Recommender</h1>
             <div class="recommender">
                     <a href="#contents_based" id="contents_based">コンテンツベースフィルタリング</a>
-                    <a>協調フィルタリング（ユーザベース）</a>
+                    <a href="#collab_filtering" id="collab_filtering">協調フィルタリング（ユーザベース）</a>
             </div>    
         </div>
 
         <div id="contents_based_area" style="display:none">
             <!-- 映画検索フォーム -->
-            <div id="header-button">
-                <button id="back-to-menu-btn">Back To Menu</button>        
+            <div class="header-button">
+                <button class="back-to-menu-btn">Back To Menu</button>        
                 <button id="back-to-contents-based-btn" style="display:none">Back To ContentsBased</button>
             </div>
         
@@ -40,7 +40,7 @@
                     </li>
                     {% endfor %}
                 </ul>
-                <div id="button-area">
+                <div id="contents-based-button-area">
                     <button id="search-btn">Search</button>        
                     <button id="refresh-btn">Nothing Here</button>
                 </div>
@@ -57,7 +57,63 @@
                 <ul id="recommendation-list"></ul>
             </div>
         </div>
+
+        <div id="collab_filtering_area" style="display:none">
+            <!-- 映画検索フォーム -->
+            <div class="header-button">
+                <button class="back-to-menu-btn">Back To Menu</button>        
+                <button id="back-to-collab-filtering-btn" style="display:none">Back To Collaborative Filtering</button>
+            </div>
+        
+            <div id="movie-evaluate">
+                <h2>Evaluate the movie below. If you haven't watched it, click 'Show next'</h2>
+                <ul>
+                    <li class="rand-movie-area">
+                        <div>
+                            <!-- <img src="" alt="" width="" height=""> -->
+                            <div class="md-radio md-radio-inline">
+                                <input id="ev_1" type="radio" name="g2" checked>
+                                <label for="1">１</label>
+                            </div>
+                            <div class="md-radio md-radio-inline">
+                                <input id="ev_2" type="radio" name="g2">
+                                <label for="4">２</label>
+                            </div>                        
+                            <div class="md-radio md-radio-inline">
+                                <input id="ev_3" type="radio" name="g2">
+                                <label for="3">３</label>
+                            </div>
+                            <div class="md-radio md-radio-inline">
+                                <input id="ev_4" type="radio" name="g2">
+                                <label for="4">４</label>
+                            </div>                        
+
+                            <div class="md-radio md-radio-inline">
+                                <input id="ev_5" type="radio" name="g2">
+                                <label for="3">５</label>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div class="collab-filtering-button-area">
+                    <button id="send-btn">Send</button>        
+                    <button id="another-movie-btn">Show next</button>
+                </div>
+            </div>
+        
+            <!-- 映画情報と推薦結果を表示する領域 -->
+            <div class="movie-details">
+                <h2 id="movie-title"></h2>
+                <p id="movie-description"></p>
+            </div>
+        
+            <div class="recommendations">
+                <h3>Recommended Movies:</h3>
+                <ul id="recommendation-list"></ul>
+            </div>
+        </div>
     </div>
+
     <script src="../static/script.js"></script>
 </body>
 </html>
