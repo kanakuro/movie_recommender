@@ -12,7 +12,11 @@ const collabFilteringBtn = document.getElementById("collab_filtering");
 const menuArea = document.getElementById("menu_area");
 const contentsBasedArea = document.getElementById("contents_based_area");
 const collabFilteringArea = document.getElementById("collab_filtering_area");
-const buttonArea = document.getElementById("contents-based-button-area");
+const contentsBaseduttonArea = document.getElementById(
+  "contents-based-button-area"
+);
+const sendBtn = document.getElementById("send-btn");
+const showNextBtn = document.getElementById("show-next-btn");
 const backToMenuBtn = document.querySelectorAll(".back-to-menu-btn");
 const backToContentsBasedBtn = document.getElementById(
   "back-to-contents-based-btn"
@@ -33,11 +37,16 @@ collabFilteringBtn.addEventListener("click", function () {
 
 // リロード後、メニューエリアを表示するかチェック
 window.addEventListener("load", () => {
-  if (localStorage.getItem("hideMenuArea") === "true") {
+  if (localStorage.getItem("contentsAreaOnly") === "true") {
     contentsBasedArea.style.display = "";
     menuArea.style.display = "none";
     backToContentsBasedBtn.display = "none";
-    localStorage.removeItem("hideMenuArea"); // 状態をリセット
+    localStorage.removeItem("contentsAreaOnly"); // 状態をリセット
+  }
+  if (localStorage.getItem("colabAreaOnly") === "true") {
+    collabFilteringArea.style.display = "";
+    menuArea.style.display = "none";
+    localStorage.removeItem("colabAreaOnly"); // 状態をリセット
   }
 });
 
@@ -46,13 +55,13 @@ window.addEventListener("load", () => {
 ////////////////////////////////////////
 // コンテンツベースの画面を出し直すボタン押下後の処理
 refreshBtn.addEventListener("click", () => {
-  localStorage.setItem("hideMenuArea", "true");
+  localStorage.setItem("contentsAreaOnly", "true");
   window.location.reload();
 });
 
 // コンテンツベースに戻るボタン押下後の処理
 backToContentsBasedBtn.addEventListener("click", () => {
-  localStorage.setItem("hideMenuArea", "true");
+  localStorage.setItem("contentsAreaOnly", "true");
   window.location.reload();
 });
 
@@ -96,7 +105,7 @@ searchBtn.addEventListener("click", () => {
         displayRecommendations(data);
         hideNonSelectedMovieLists();
         backToContentsBasedBtn.display = "";
-        buttonArea.style.display = "none";
+        contentsBaseduttonArea.style.display = "none";
       }
 
       // ローディング画面終了
@@ -142,4 +151,43 @@ function hideNonSelectedMovieLists() {
       item.style.display = "none";
     }
   });
+}
+
+////////////////////////////////////////
+///// 強調フィルタリング（ユーザベース）
+////////////////////////////////////////
+// sendボタン押下時
+sendBtn.addEventListener("click", () => {
+  let target_title = document.getElementById("evaluated_movie_title").innerHTML;
+  let target_evaluation = document.querySelector(
+    'input[name="eval"]:checked'
+  ).value;
+
+  // ローカルストレージに評価地を保存（配列の中にJSONを格納）
+  if (!localStorage.getItem("eval_list")) {
+    localStorage.setItem("eval_list", JSON.stringify([]));
+  }
+  let eval_list = JSON.parse(localStorage.getItem("eval_list"));
+  let target_json = { title: target_title, eval: target_evaluation };
+  eval_list.push(target_json);
+  localStorage.setItem("eval_list", JSON.stringify(eval_list));
+
+  eval_cnt = eval_list.length;
+  if (eval_cnt > 4) {
+    // おすすめを表示させるリクエスト
+  } else {
+    // 登録個数が４子以下なら次の映画を表示
+    nextMovie();
+  }
+});
+
+// showNext押下時
+showNextBtn.addEventListener("click", () => {
+  nextMovie();
+});
+
+// 次の評価映画を表示させる処理
+function nextMovie() {
+  localStorage.setItem("colabAreaOnly", "true");
+  window.location.reload();
 }

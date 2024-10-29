@@ -19,8 +19,8 @@ def index():
         escaped_rand_title = html.escape(rand_title).replace(" ", "&nbsp;")
         # API(detailでid調べて画像のurl取得)
         image_url = api.get_movie_image_url(rand_title)
-        escaped_rand_list[i] = [escaped_rand_title, image_url]
-    return render_template("index.html", rand_list = rand_list, escaped_rand_list = escaped_rand_list)
+        escaped_rand_list[i] = [rand_title, escaped_rand_title, image_url]
+    return render_template("index.html", escaped_rand_list = escaped_rand_list)
 
 
 ####################################
@@ -68,7 +68,7 @@ def get_recommendations(title):
 ####################################
 #     協調フィルタリング(ユーザベース)
 ####################################
-
+# @app.route('/recommend', methods=['GET'])
 
 
 

@@ -33,10 +33,10 @@
                     {% for i,er in escaped_rand_list.items() %}
                     <li class="rand-movie-area">
                         <label id="title">
-                            <input type="radio" name="choices" value={{er[0]}} />
-                            {{ rand_list[i] }}
+                            <input type="radio" name="choices" value={{er[1]}} />
+                            {{ er[0] }}
                         </label>
-                        <img src={{er[1]}} alt="" width="" height="">
+                        <img src={{er[2]}} alt="" width="" height="">
                     </li>
                     {% endfor %}
                 </ul>
@@ -69,35 +69,36 @@
                 <h2>Evaluate the movie below. If you haven't watched it, click 'Show next'</h2>
                 <ul>
                     <li class="rand-movie-area">
+                        <img src={{escaped_rand_list[0][2]}} alt="" width="" height="">
+                        <div id="evaluated_movie_title">{{ escaped_rand_list[0][0] }}</div>
                         <div>
-                            <!-- <img src="" alt="" width="" height=""> -->
                             <div class="md-radio md-radio-inline">
-                                <input id="ev_1" type="radio" name="g2" checked>
+                                <input value="1" type="radio" name="eval" checked>
                                 <label for="1">１</label>
                             </div>
                             <div class="md-radio md-radio-inline">
-                                <input id="ev_2" type="radio" name="g2">
+                                <input value="2" type="radio" name="eval">
                                 <label for="4">２</label>
                             </div>                        
                             <div class="md-radio md-radio-inline">
-                                <input id="ev_3" type="radio" name="g2">
+                                <input value="3" type="radio" name="eval">
                                 <label for="3">３</label>
                             </div>
                             <div class="md-radio md-radio-inline">
-                                <input id="ev_4" type="radio" name="g2">
+                                <input value="4" type="radio" name="eval">
                                 <label for="4">４</label>
                             </div>                        
 
                             <div class="md-radio md-radio-inline">
-                                <input id="ev_5" type="radio" name="g2">
+                                <input value="5" type="radio" name="eval">
                                 <label for="3">５</label>
                             </div>
                         </div>
                     </li>
                 </ul>
                 <div class="collab-filtering-button-area">
-                    <button id="send-btn">Send</button>        
-                    <button id="another-movie-btn">Show next</button>
+                    <button id="send-btn">Add Evaluation</button>        
+                    <button id="show-next-btn">Show next</button>
                 </div>
             </div>
         
