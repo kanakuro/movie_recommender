@@ -26,8 +26,8 @@ def index():
 ####################################
 #     コンテンツベース
 ####################################
-@app.route('/recommend', methods=['GET'])
-def recommend():
+@app.route('/recommend_contents_base', methods=['GET'])
+def recommend_contents_base():
     title = request.args.get('title')
     recommendations = get_recommendations(title)
 
@@ -47,7 +47,7 @@ def get_recommendations(title):
     movies = pd.read_csv('/Users/kuro/dev/movie_recommend/app/static/datas/movies.csv')
     mlb = MultiLabelBinarizer()
     movies['genres'] = movies['genres'].str.split('|')
-    # ジャンルをOne-Hot Encoding（0,1の形式）に変換
+    # ジャンルをOne-Hot Encodingに変換
     movies_with_genres = movies.join(pd.DataFrame(mlb.fit_transform(movies.pop('genres')), columns=mlb.classes_, index=movies.index))
     cosine_sim = cosine_similarity(movies_with_genres.drop(['movieId', 'title'], axis=1))
     sim_scores = list(enumerate(cosine_sim[idx]))
@@ -68,9 +68,61 @@ def get_recommendations(title):
 ####################################
 #     協調フィルタリング(ユーザベース)
 ####################################
-# @app.route('/recommend', methods=['GET'])
+@app.route('/colab_filetring_request', methods=['POST'])
+def recommend_colab_filetring():
+    eval_data = request.get_json()
+    movies = pd.read_csv('/Users/kuro/dev/movie_recommend/app/static/datas/movies.csv')
+    ratings = pd.read_csv('/Users/kuro/dev/movie_recommend/app/static/datas/ratings.csv')
+
+    # ピボットテーブル作成：ユーザーごとの映画評価
+    user_movie_matrix = ratings.pivot_table(index='userId', columns='movieId', values='rating')
+
+    # レコメンド表示対象のユーザidを新設する
+    user_id = max(user_movie_matrix.index) + 1
+
+    # 例えば、ユーザーが映画を評価したらその都度レコメンドを更新
+    recommendations = rate_movie_and_get_recommendations(user_id, user_movie_matrix, movies, eval_data)
+
+    return jsonify(recommendations.str[:-7].values.tolist())
 
 
+# ユーザー間の類似度を計算する関数
+def calculate_user_similarity(user_movie_matrix):
+    user_similarity = cosine_similarity(user_movie_matrix.fillna(0))
+    return pd.DataFrame(user_similarity, index=user_movie_matrix.index, columns=user_movie_matrix.index)
+
+# おすすめ映画を計算する関数
+def recommend_movies_based_on_user(user_id, user_movie_matrix, user_similarity_df, movies_df):
+    # 類似ユーザを抽出
+    similar_users = user_similarity_df[user_id].sort_values(ascending=False)
+    # 加重評価度の算出のため、user_movie_matrixをsimilar_usersの並び順と合わせて並び替え
+    similar_user_ratings = user_movie_matrix.loc[similar_users.index]
+    
+    # 加重評価値＝ユーザ類似度＊評価値
+    weighted_ratings = np.dot(similar_users.values.astype(float), similar_user_ratings.fillna(0).values.astype(float))
+    recommendations = pd.Series(weighted_ratings, index=user_movie_matrix.columns)
+
+    # ユーザーがまだ評価していない映画をフィルタリング
+    already_rated = user_movie_matrix.loc[user_id].dropna().index
+    recommendations = recommendations.drop(already_rated).sort_values(ascending=False)
+
+    recommended_movie_ids = recommendations.head(10).index
+    # isin()で対象idに含まれる行をTrueとする
+    return movies_df[movies_df['movieId'].isin(recommended_movie_ids)]['title']
+
+# ユーザーが映画を評価するシミュレーション関数
+def rate_movie_and_get_recommendations(user_id, user_movie_matrix, movies_df, eval_data):
+    for eval in eval_data:
+        movie_id = movies_df[movies_df['title'].str.startswith(eval['title'])]['movieId'].values[0]
+        # 新しい評価を反映
+        user_movie_matrix.loc[user_id, movie_id] = eval['eval']
+
+    # ユーザー間の類似度を再計算
+    updated_user_similarity_df = calculate_user_similarity(user_movie_matrix)
+
+    # 新しいおすすめ映画を表示
+    recommendations = recommend_movies_based_on_user(user_id, user_movie_matrix, updated_user_similarity_df, movies_df)
+    return recommendations
 
 if __name__ == '__main__':
     app.run(debug=True)

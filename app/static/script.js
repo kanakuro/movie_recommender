@@ -92,8 +92,9 @@ searchBtn.addEventListener("click", () => {
   }
 
   loader.style.display = "flex";
-  // Flask APIにリクエストを送る
-  fetch(`/recommend?title=${encodeURIComponent(movieName)}`)
+
+  // コンテンツベースのレコメンドのリクエスト送信
+  fetch(`/recommend_contents_base?title=${encodeURIComponent(movieName)}`)
     .then((response) => {
       return response.json();
     })
@@ -174,7 +175,21 @@ sendBtn.addEventListener("click", () => {
 
   eval_cnt = eval_list.length;
   if (eval_cnt > 4) {
-    // おすすめを表示させるリクエスト
+    // 協調フィルタリングのおすすめを表示させるリクエスト
+    fetch("colab_filetring_request", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(eval_list),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   } else {
     // 登録個数が４子以下なら次の映画を表示
     nextMovie();
