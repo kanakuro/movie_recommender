@@ -80,10 +80,23 @@ def recommend_colab_filetring():
     # レコメンド表示対象のユーザidを新設する
     user_id = max(user_movie_matrix.index) + 1
 
-    # 例えば、ユーザーが映画を評価したらその都度レコメンドを更新
+    # ユーザーが映画を評価したらその都度レコメンドを更新
     recommendations = rate_movie_and_get_recommendations(user_id, user_movie_matrix, movies, eval_data)
+    recommendations_titles = recommendations.values
+    recommendations_movie_ids = recommendations.index
 
-    return jsonify(recommendations.str[:-7].values.tolist())
+    response = {}
+    i = 0
+    for title, movie_id in zip(recommendations_titles, recommendations_movie_ids):
+        # API(detailでid調べて映画ページのurl取得)
+        link_url = api.get_movie_link(movie_id)
+        response[i] = [title[:-7], link_url]
+        i = i + 1
+
+    if len(response) == 0:
+        return ["error"]
+    else:
+        return response
 
 
 # ユーザー間の類似度を計算する関数

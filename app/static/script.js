@@ -231,9 +231,17 @@ function getEvalListStr() {
 function displayRecommendationsByUsers(recommendations) {
   recommendationMovies.innerHTML = ""; // 以前のリストをクリア
 
-  recommendations.forEach((movie) => {
+  const recommendation_arrays = Object.values(recommendations);
+  recommendation_arrays.forEach((recommendation) => {
+    title = recommendation[0];
+    link = recommendation[1];
+    const a = document.createElement("a");
+    a.textContent = title;
+    a.href = link;
+    a.target = "_blank";
     const li = document.createElement("li");
-    li.textContent = movie;
+    li.appendChild(a);
+
     recommendationMovies.appendChild(li);
   });
   movieEvaluateArea.style.display = "none";

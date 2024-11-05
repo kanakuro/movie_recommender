@@ -18,7 +18,7 @@ h1 {
     text-align: center;
 }
 
-a{
+#contents_based, #collab_filtering{
   font-family:'sans-serif';
   display:block;
   margin-top:20px;

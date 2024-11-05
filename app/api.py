@@ -13,10 +13,10 @@ headers = {
 
 def get_movie_image_url(movie_title):
     movie_id = get_movie_id(movie_title)
-    image_url = "https://api.themoviedb.org/3/movie/"
-    image_url += str(movie_id)
-    image_url += "/images"
-    response = requests.get(image_url, headers=headers)
+    image_request_url = "https://api.themoviedb.org/3/movie/"
+    image_request_url += str(movie_id)
+    image_request_url += "/images"
+    response = requests.get(image_request_url, headers=headers)
     image_url = ''
     if response:
         response = response.json()
@@ -37,3 +37,18 @@ def get_movie_id(movie_title):
         if len(response['results']) > 0:
             movie_id = response['results'][0]['id']
     return movie_id
+
+def get_movie_link(movie_id):
+    # movie_id = get_movie_id(movie_title)
+    link_request_url = "https://api.themoviedb.org/3/movie/"
+    link_request_url += str(movie_id)
+    link_request_url += "/watch/providers"
+    response = requests.get(link_request_url, headers=headers)
+    link_url = ''
+    if response:
+        response = response.json()
+        if len(response['results']) > 0:
+            first_key = next(iter(response['results']))
+            link = response['results'][first_key]['link']
+            link_url = link[:-10]
+    return link_url
