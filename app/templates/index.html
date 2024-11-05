@@ -23,8 +23,8 @@
         <div id="contents_based_area" style="display:none">
             <!-- 映画検索フォーム -->
             <div class="header-button">
-                <button class="back-to-menu-btn">Back To Menu</button>        
-                <button id="back-to-contents-based-btn" style="display:none">Back To ContentsBased</button>
+                <button class="back-to-menu-btn btn">Back To Menu</button>        
+                <button id="back-to-contents-based-btn" class="btn" style="display:none">Back To ContentsBased</button>
             </div>
         
             <div class="choice-list" id="movie-choices">
@@ -41,8 +41,8 @@
                     {% endfor %}
                 </ul>
                 <div id="contents-based-button-area">
-                    <button id="search-btn">Search</button>        
-                    <button id="refresh-btn">Nothing Here</button>
+                    <button id="search-btn" class="btn">Search</button>        
+                    <button id="refresh-btn" class="btn">Nothing Here</button>
                 </div>
             </div>
         
@@ -65,7 +65,9 @@
                 <button id="back-to-collab-filtering-btn" style="display:none">Back To Collaborative Filtering</button>
             </div>
         
-            <div id="movie-evaluate">
+            <div id="movie-evaluate-area">
+                <h2>Evaluations list</h2>
+                <ul id="evaluated-movies"></ul>
                 <h2>Evaluate the movie below. If you haven't watched it, click 'Show next'</h2>
                 <ul>
                     <li class="rand-movie-area">
@@ -97,20 +99,15 @@
                     </li>
                 </ul>
                 <div class="collab-filtering-button-area">
-                    <button id="send-btn">Add Evaluation</button>        
-                    <button id="show-next-btn">Show next</button>
+                    <button id="send-btn" class="btn">Add Evaluation</button>        
+                    <button id="show-next-btn" class="btn">Show next</button>
                 </div>
             </div>
         
             <!-- 映画情報と推薦結果を表示する領域 -->
-            <div class="movie-details">
-                <h2 id="movie-title"></h2>
-                <p id="movie-description"></p>
-            </div>
-        
             <div class="recommendations">
                 <h3>Recommended Movies:</h3>
-                <ul id="recommendation-list"></ul>
+                <ul id="recommendation-movies"></ul>
             </div>
         </div>
     </div>

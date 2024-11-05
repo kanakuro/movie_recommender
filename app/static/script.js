@@ -21,6 +21,9 @@ const backToMenuBtn = document.querySelectorAll(".back-to-menu-btn");
 const backToContentsBasedBtn = document.getElementById(
   "back-to-contents-based-btn"
 );
+const recommendationMovies = document.getElementById("recommendation-movies");
+const evaluatedMovies = document.getElementById("evaluated-movies");
+const movieEvaluateArea = document.getElementById("movie-evaluate-area");
 
 ////////////////////////////////////////
 ///// メニュー画面
@@ -48,6 +51,16 @@ window.addEventListener("load", () => {
     menuArea.style.display = "none";
     localStorage.removeItem("colabAreaOnly"); // 状態をリセット
   }
+});
+
+// リロード中、ボタンを非活性にする
+window.addEventListener("beforeunload", function () {
+  // クラス名が "btn" の全ての要素を取得
+  const buttons = document.querySelectorAll(".btn");
+  // 各ボタンに対して disabled 属性を true に設定
+  buttons.forEach((button) => {
+    button.disabled = true;
+  });
 });
 
 ////////////////////////////////////////
@@ -157,6 +170,10 @@ function hideNonSelectedMovieLists() {
 ////////////////////////////////////////
 ///// 強調フィルタリング（ユーザベース）
 ////////////////////////////////////////
+let eval_list = getEvalListStr();
+// 評価した映画リストに表示
+displayEvaluatedMovies(eval_list);
+
 // sendボタン押下時
 sendBtn.addEventListener("click", () => {
   let target_title = document.getElementById("evaluated_movie_title").innerHTML;
@@ -165,13 +182,12 @@ sendBtn.addEventListener("click", () => {
   ).value;
 
   // ローカルストレージに評価地を保存（配列の中にJSONを格納）
-  if (!localStorage.getItem("eval_list")) {
-    localStorage.setItem("eval_list", JSON.stringify([]));
-  }
-  let eval_list = JSON.parse(localStorage.getItem("eval_list"));
+  eval_list = getEvalListStr();
   let target_json = { title: target_title, eval: target_evaluation };
   eval_list.push(target_json);
   localStorage.setItem("eval_list", JSON.stringify(eval_list));
+  // 評価した映画リストに表示
+  displayEvaluatedMovies(eval_list);
 
   eval_cnt = eval_list.length;
   if (eval_cnt > 4) {
@@ -186,6 +202,7 @@ sendBtn.addEventListener("click", () => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
+        displayRecommendationsByUsers(data);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -200,6 +217,40 @@ sendBtn.addEventListener("click", () => {
 showNextBtn.addEventListener("click", () => {
   nextMovie();
 });
+
+// ローカルストレージに保存された評価内容を取得
+function getEvalListStr() {
+  if (!localStorage.getItem("eval_list")) {
+    localStorage.setItem("eval_list", JSON.stringify([]));
+  }
+  let eval_list = JSON.parse(localStorage.getItem("eval_list"));
+  return eval_list;
+}
+
+// 推薦映画を表示
+function displayRecommendationsByUsers(recommendations) {
+  recommendationMovies.innerHTML = ""; // 以前のリストをクリア
+
+  recommendations.forEach((movie) => {
+    const li = document.createElement("li");
+    li.textContent = movie;
+    recommendationMovies.appendChild(li);
+  });
+  movieEvaluateArea.style.display = "none";
+}
+
+// 評価した映画を表示する
+function displayEvaluatedMovies(eval_list) {
+  evaluatedMovies.innerHTML = ""; // 以前のリストをクリア
+
+  if (eval_list.length > 0) {
+    eval_list.forEach((eval) => {
+      const li = document.createElement("li");
+      li.textContent = eval.title + "　：　" + eval.eval;
+      evaluatedMovies.appendChild(li);
+    });
+  }
+}
 
 // 次の評価映画を表示させる処理
 function nextMovie() {
