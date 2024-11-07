@@ -105,6 +105,7 @@ searchBtn.addEventListener("click", () => {
     return;
   }
 
+  // searching...を表示
   loader.style.display = "flex";
 
   // コンテンツベースのレコメンドのリクエスト送信
@@ -143,9 +144,17 @@ function displayMovieDetails(title) {
 function displayRecommendations(recommendations) {
   recommendationList.innerHTML = ""; // 以前のリストをクリア
 
-  recommendations.forEach((movie) => {
+  const recommendation_arrays = Object.values(recommendations);
+  recommendation_arrays.forEach((recommendation) => {
+    title = recommendation[0];
+    link = recommendation[1];
+    const a = document.createElement("a");
+    a.textContent = title;
+    a.href = link;
+    a.target = "_blank";
     const li = document.createElement("li");
-    li.textContent = movie;
+    li.appendChild(a);
+
     recommendationList.appendChild(li);
   });
 }

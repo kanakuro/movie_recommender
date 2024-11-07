@@ -62,8 +62,24 @@ def get_recommendations(title):
     target_movie_indices = [i[0] for i in sim_scores]
 
     # 推薦映画のタイトルを返す
-    movie_titles = movie_indices.iloc[target_movie_indices].index.to_list()
-    return movie_titles
+    movie_titles = movie_indices.iloc[target_movie_indices].index
+    movie_ids = movie_indices.iloc[target_movie_indices].values
+
+    response = {}
+    i = 0
+    for title, movie_id in zip(movie_titles, movie_ids):
+        # movie_idが配列になっているのでintにする
+        movie_id = movie_id[0]
+        # API(detailでid調べて映画ページのurl取得)
+        link_url = api.get_movie_link(movie_id)
+        response[i] = [title, link_url]
+        i = i + 1
+
+    if len(response) == 0:
+        return ["error"]
+    else:
+        return response
+    # return movie_titles
 
 ####################################
 #     協調フィルタリング(ユーザベース)
