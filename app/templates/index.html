@@ -42,7 +42,7 @@
                 </ul>
                 <div id="contents-based-button-area">
                     <button id="search-btn" class="btn">Search</button>        
-                    <button id="refresh-btn" class="btn">Nothing Here</button>
+                    <button id="nothing-here-btn" class="btn">Nothing Here</button>
                 </div>
             </div>
         
@@ -61,8 +61,9 @@
         <div id="collab_filtering_area" style="display:none">
             <!-- 映画検索フォーム -->
             <div class="header-button">
-                <button class="back-to-menu-btn">Back To Menu</button>        
-                <button id="back-to-collab-filtering-btn" style="display:none">Back To Collaborative Filtering</button>
+                <button class="back-to-menu-btn btn">Back To Menu</button>
+                <button id="refresh-btn" class="btn">Refresh Evaluations</button>        
+                <button id="back-to-collab-filtering-btn" class="btn" style="display:none">Back To Collaborative Filtering</button>
             </div>
 
             <h2>Evaluations list</h2>
@@ -72,7 +73,7 @@
                 <h2>Evaluate the movie below. If you haven't watched it, click 'Show next'</h2>
                 <ul>
                     <li class="rand-movie-area">
-                        <img src={{escaped_rand_list[0][2]}} alt="" width="" height="">
+                        <img src={{escaped_rand_list[0][2]}} id="evaluated_movie_img">
                         <div id="evaluated_movie_title">{{ escaped_rand_list[0][0] }}</div>
                         <div>
                             <div class="md-radio md-radio-inline">
@@ -99,6 +100,12 @@
                         </div>
                     </li>
                 </ul>
+                <div id="received_movies_list">
+                    {% for i,er in escaped_rand_list.items() %}
+                    <input type="hidden" class="received_movie" value={{er[1]}}>
+                    <input type="hidden" class="received_image_url" value={{er[2]}}>
+                    {% endfor %}
+                </div>
                 <div class="collab-filtering-button-area">
                     <button id="send-btn" class="btn">Add Evaluation</button>        
                     <button id="show-next-btn" class="btn">Show next</button>

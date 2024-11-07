@@ -3,6 +3,7 @@
 ////////////////////////////////////////
 const searchBtn = document.getElementById("search-btn");
 const refreshBtn = document.getElementById("refresh-btn");
+const nothingHereBtn = document.getElementById("nothing-here-btn");
 const movieTitle = document.getElementById("movie-title");
 const movieDescription = document.getElementById("movie-description");
 const recommendationList = document.getElementById("recommendation-list");
@@ -67,7 +68,7 @@ window.addEventListener("beforeunload", function () {
 ///// コンテンツベース
 ////////////////////////////////////////
 // コンテンツベースの画面を出し直すボタン押下後の処理
-refreshBtn.addEventListener("click", () => {
+nothingHereBtn.addEventListener("click", () => {
   localStorage.setItem("contentsAreaOnly", "true");
   window.location.reload();
 });
@@ -174,6 +175,28 @@ let eval_list = getEvalListStr();
 // 評価した映画リストに表示
 displayEvaluatedMovies(eval_list);
 
+// 【グローバル】ロード時に受け取った10件の映画リストを格納する
+let received_movies_list_escaped = document.querySelectorAll(".received_movie");
+let received_movie_url_list = document.querySelectorAll(".received_image_url");
+let received_movies_list = [];
+let received_url_list = [];
+received_movies_list_escaped.forEach((received_movie_escaped) => {
+  let received_movie;
+  if (received_movie_escaped !== null) {
+    received_movie_escaped = received_movie_escaped.value;
+    received_movie = received_movie_escaped.replaceAll("&nbsp;", " ");
+    // received_movies_listに10件のリストを格納する
+    received_movies_list.push(received_movie);
+  }
+});
+received_movie_url_list.forEach((received_movie_url) => {
+  if (received_movie_url !== null) {
+    received_url_list.push(received_movie_url.value);
+  }
+});
+// 初期表示
+nextMovie();
+
 // sendボタン押下時
 sendBtn.addEventListener("click", () => {
   let target_title = document.getElementById("evaluated_movie_title").innerHTML;
@@ -201,7 +224,6 @@ sendBtn.addEventListener("click", () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Success:", data);
         displayRecommendationsByUsers(data);
       })
       .catch((error) => {
@@ -217,6 +239,37 @@ sendBtn.addEventListener("click", () => {
 showNextBtn.addEventListener("click", () => {
   nextMovie();
 });
+
+// Refresh Evaluationsボタン押下後の処理
+refreshBtn.addEventListener("click", () => {
+  // ローカルストレージをクリア
+  localStorage.removeItem("eval_list");
+  // レコメンドエリアは非表示、評価エリアは表示
+  movieEvaluateArea.style.display = "";
+  recommendationMovies.style.display = "none";
+  // 評価中の映画エリアはクリア
+  let eval_list = [];
+  displayEvaluatedMovies(eval_list);
+});
+
+// 次の評価映画を表示させる処理
+// グローバル変数received_movies_listを使う
+function nextMovie() {
+  if (received_movies_list.length === 0) {
+    // 配列received_movies_listがない場合、次の10件を受け取る
+    localStorage.setItem("colabAreaOnly", "true");
+    window.location.reload();
+  } else {
+    // 配列received_movies_listの先頭の映画を表示させる
+    let showed_movie_title = document.getElementById("evaluated_movie_title");
+    let showed_movie_img = document.getElementById("evaluated_movie_img");
+    showed_movie_title.innerHTML = received_movies_list[0];
+    showed_movie_img.src = received_url_list[0];
+    // 表示した映画のタイトルは、配列received_movies_listから削除する
+    received_movies_list.splice(0, 1);
+    received_url_list.splice(0, 1);
+  }
+}
 
 // ローカルストレージに保存された評価内容を取得
 function getEvalListStr() {
@@ -258,10 +311,4 @@ function displayEvaluatedMovies(eval_list) {
       evaluatedMovies.appendChild(li);
     });
   }
-}
-
-// 次の評価映画を表示させる処理
-function nextMovie() {
-  localStorage.setItem("colabAreaOnly", "true");
-  window.location.reload();
 }

@@ -44,14 +44,7 @@ h1 {
     font-size: 16px;
 }
 
-#search-btn {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-left: 10px;
-}
-
-#refresh-btn {
+#search-btn, #nothing-here-btn {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
