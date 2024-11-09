@@ -142,9 +142,11 @@ def recommend_movies_based_on_user(user_id, user_movie_matrix, user_similarity_d
 # ユーザーが映画を評価するシミュレーション関数
 def rate_movie_and_get_recommendations(user_id, user_movie_matrix, movies_df, eval_data):
     for eval in eval_data:
-        movie_id = movies_df[movies_df['title'].str.startswith(eval['title'])]['movieId'].values[0]
-        # 新しい評価を反映
-        user_movie_matrix.loc[user_id, movie_id] = eval['eval']
+        movie_row = movies_df[movies_df['title'].str.startswith(eval['title'])]
+        if movie_row.empty == False:
+            movie_id = movie_row['movieId'].values[0]
+            # 新しい評価を反映
+            user_movie_matrix.loc[user_id, movie_id] = eval['eval']
 
     # ユーザー間の類似度を再計算
     updated_user_similarity_df = calculate_user_similarity(user_movie_matrix)
