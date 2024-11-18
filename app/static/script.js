@@ -299,13 +299,16 @@ function displayRecommendationsByUsers(recommendations) {
     link = recommendation[1];
     const a = document.createElement("a");
     a.textContent = title;
-    a.href = link;
+    if (link.length > 0) {
+      a.href = link;
+    }
     a.target = "_blank";
     const li = document.createElement("li");
     li.appendChild(a);
 
     recommendationMovies.appendChild(li);
   });
+  recommendationMovies.style.display = "";
   movieEvaluateArea.style.display = "none";
 }
 

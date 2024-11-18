@@ -63,15 +63,12 @@ def get_recommendations(title):
 
     # 推薦映画のタイトルを返す
     movie_titles = movie_indices.iloc[target_movie_indices].index
-    movie_ids = movie_indices.iloc[target_movie_indices].values
+    # movie_ids = movie_indices.iloc[target_movie_indices].values
 
     response = {}
     i = 0
-    for title, movie_id in zip(movie_titles, movie_ids):
-        # movie_idが配列になっているのでintにする
-        movie_id = movie_id[0]
-        # API(detailでid調べて映画ページのurl取得)
-        link_url = api.get_movie_link(movie_id)
+    for title in movie_titles:
+        link_url = api.get_movie_link(title)
         response[i] = [title, link_url]
         i = i + 1
 
@@ -79,7 +76,6 @@ def get_recommendations(title):
         return ["error"]
     else:
         return response
-    # return movie_titles
 
 ####################################
 #     協調フィルタリング(ユーザベース)
@@ -99,14 +95,14 @@ def recommend_colab_filetring():
     # ユーザーが映画を評価したらその都度レコメンドを更新
     recommendations = rate_movie_and_get_recommendations(user_id, user_movie_matrix, movies, eval_data)
     recommendations_titles = recommendations.values
-    recommendations_movie_ids = recommendations.index
 
     response = {}
     i = 0
-    for title, movie_id in zip(recommendations_titles, recommendations_movie_ids):
+    for title in recommendations_titles:
+        title = title[:-7]
         # API(detailでid調べて映画ページのurl取得)
-        link_url = api.get_movie_link(movie_id)
-        response[i] = [title[:-7], link_url]
+        link_url = api.get_movie_link(title)
+        response[i] = [title, link_url]
         i = i + 1
 
     if len(response) == 0:

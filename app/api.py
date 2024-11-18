@@ -38,8 +38,8 @@ def get_movie_id(movie_title):
             movie_id = response['results'][0]['id']
     return movie_id
 
-def get_movie_link(movie_id):
-    # movie_id = get_movie_id(movie_title)
+def get_movie_link(movie_title):
+    movie_id = get_movie_id(movie_title)
     link_request_url = "https://api.themoviedb.org/3/movie/"
     link_request_url += str(movie_id)
     link_request_url += "/watch/providers"
